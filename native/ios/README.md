@@ -125,7 +125,7 @@ The core tests cover:
 - `RecordStore` derives storage availability only from the `KeyValueStore` it was given. `KeychainKeyValueStore` still reads through `PuxKeychain`, so production behaviour is unchanged; an in-memory store no longer consults the process-wide backend.
 - `PuxLaunchContext.current` is `.test` in any XCTest process, including the host app of app-hosted tests (it checks the XCTest environment variables, which exist before the test bundle loads). In `.test`, `PuxKeychain.backend` starts as `InMemoryPuxKeychainBackend` and `RecordStore.shared` uses in-memory storage and journals, so nothing reaches Security by default. Tests that swap the backend must restore the previous one, never `LivePuxKeychainBackend()`.
 - `AppDelegate` runs Keychain migration, the protected-data observer, notification-center wiring, APNs registration and Firebase configuration only through `AppBootstrap.run`, which runs none of them in `.test`. Production order is unchanged.
-- The `PuxTests` Xcode target is hosted by `Pux.app`, so it launches the real `AppDelegate`; the gate above is what keeps that launch off the production services. The gate is unit-tested with spy steps; the `AppDelegate` wiring itself was compiled but not run in a simulator.
+- The `PuxTests` Xcode target is hosted by `Pux.app`, so it launches the real `AppDelegate`; the gate above is what keeps that launch off the production services. The gate is unit-tested with spy steps and exercised by the hosted simulator tests.
 
 ### Xcode Project & Command-line Builds
 Generate or update the standalone Xcode project at any time:
@@ -140,6 +140,18 @@ To build test targets:
 ```bash
 xcodebuild -project native/ios/Pux.xcodeproj -scheme Pux -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build-for-testing
 ```
+
+Run the hosted tests on an available iPhone simulator (the same signing settings
+as the native CI job). Choose its UUID from `xcrun simctl list devices available`:
+
+```bash
+xcodebuild -project native/ios/Pux.xcodeproj -scheme Pux -configuration Debug \
+  -destination 'platform=iOS Simulator,id=<SIMULATOR_UUID>' \
+  CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO test
+```
+
+These simulator tests use an ad-hoc signature, in-memory storage, and the test
+launch gate described above; they do not require Apple provisioning profiles.
 
 ---
 
@@ -279,3 +291,32 @@ malformed input, sender matching, corrupt storage, lost keys, and relay changes.
 Run the Swift package tests and simulator build from **Building and Testing** above
 on a Mac. Physical-device AutoFill and APNs behavior require the checks above;
 static project validation on Linux does not establish that they work.
+
+### Mac validation (2026-11-15)
+
+With Xcode 27.2 (27B52), Swift 6.4.2, and a dedicated iPhone 18 Pro simulator
+running iOS 27.2:
+
+- `swift test --disable-sandbox`: 124 tests passed, including all seven
+  `AutoFillStoreTests`.
+- Unsigned `build-for-testing`: passed for the app, NotificationService, and
+  embedded AutoFillExtension, including arm64 and x86_64 simulator compilation.
+  The app and NotificationService retain their iOS 15 deployment targets;
+  AutoFillExtension retains iOS 18.
+- Ad-hoc-signed hosted simulator tests: 124 tests passed, with no failures.
+- A temporary simulator harness compiled the unchanged setup and credential
+  provider views against an in-memory Keychain backend. Assertions passed for
+  configuration UI, the secure `.oneTimeCode` verification field, disabled and
+  empty pickers, unverified sender labeling, refreshing a stale selection,
+  disabling/clearing the cache, and rechecking expiry before filling. This called
+  the view controller directly; it did not invoke the system AutoFill picker or
+  fulfill a request through the keyboard.
+- Ruby signing-helper syntax, Xcode project regeneration (no diff),
+  `git diff --check`, and native/TestFlight workflow correctness lint passed.
+
+This validates compilation against the installed SDK and the isolated test suite.
+It does not validate installation on iOS 15 or 18, distribution signing, a shared
+device Keychain, physical-device APNs delivery, system keyboard suggestions,
+or Safari/bank-app matching. Device provisioning still requires the AutoFill
+capability in the app profile and a separate AutoFill extension profile, including
+`IOS_AUTOFILL_PROFILE_BASE64` for TestFlight. No archive or upload was performed.
