@@ -178,7 +178,7 @@ All of this is in the [Apple Developer portal](https://developer.apple.com/accou
 
 1. **Team ID.** Find it under Membership details. Store it as a repository variable:
    `gh variable set APPLE_TEAM_ID --body <TEAM_ID>`
-2. **App IDs.** Under Certificates, Identifiers & Profiles → Identifiers, register `xyz.vidur.pux` with **Push Notifications** turned on, and `xyz.vidur.pux.NotificationService` with no extra capabilities. Keychain sharing needs no capability.
+2. **App IDs.** Under Certificates, Identifiers & Profiles → Identifiers, register `xyz.vidur.pux` with **Push Notifications** and **AutoFill Credential Provider** turned on, `xyz.vidur.pux.AutoFill` with **AutoFill Credential Provider**, and `xyz.vidur.pux.NotificationService` with no extra capabilities. Keychain sharing needs no capability.
 3. **Push.** Under Keys, create a key with **Apple Push Notifications service (APNs)** and download the `.p8`. In the Firebase console (project `pux-vb`), go to Project settings → Cloud Messaging → Apple app configuration and upload it with its Key ID and your Team ID. Without this, iOS devices get no pushes.
 4. **Distribution certificate.** Make a signing request without touching Keychain:
 
@@ -194,7 +194,7 @@ All of this is in the [Apple Developer portal](https://developer.apple.com/accou
    openssl pkcs12 -export -legacy -inkey dist.key -in dist.pem -out dist.p12
    ```
 
-5. **Provisioning profiles.** Under Profiles, create two **App Store Connect** distribution profiles with the certificate from step 4. Name the one for `xyz.vidur.pux` "pux App Store" and the one for `xyz.vidur.pux.NotificationService` "pux NotificationService App Store". The names are informational: the workflow reads them from the files.
+5. **Provisioning profiles.** Under Profiles, create three **App Store Connect** distribution profiles with the certificate from step 4. Name the one for `xyz.vidur.pux` "pux App Store" and the one for `xyz.vidur.pux.NotificationService` "pux NotificationService App Store", plus "pux AutoFill App Store" for `xyz.vidur.pux.AutoFill`. Regenerate the main app profile when enabling the AutoFill capability. The names are informational: the workflow reads them from the files.
 6. **App record.** In App Store Connect → Apps → New App: platform iOS, bundle ID `xyz.vidur.pux`, SKU `pux`. The name must be unique on the App Store, and you can change it later.
 7. **API key for uploads.** In App Store Connect → Users and Access → Integrations → App Store Connect API, generate a team key with the **App Manager** role. Download the `.p8` (you can only download it once), and note the Key ID and the Issuer ID.
 8. **Secrets.** From the directory holding the files:
@@ -204,6 +204,7 @@ All of this is in the [Apple Developer portal](https://developer.apple.com/accou
    gh secret set IOS_DIST_CERT_PASSWORD          # the export password from step 4
    base64 -i pux_App_Store.mobileprovision | gh secret set IOS_APP_PROFILE_BASE64
    base64 -i pux_NotificationService_App_Store.mobileprovision | gh secret set IOS_EXTENSION_PROFILE_BASE64
+   base64 -i pux_AutoFill_App_Store.mobileprovision | gh secret set IOS_AUTOFILL_PROFILE_BASE64
    gh secret set APP_STORE_CONNECT_API_KEY < AuthKey_<KEY_ID>.p8
    gh secret set APP_STORE_CONNECT_KEY_ID --body <KEY_ID>
    gh secret set APP_STORE_CONNECT_ISSUER_ID --body <ISSUER_ID>
@@ -219,3 +220,62 @@ The certificate and profiles expire after a year. Renew them by repeating steps 
 - Each build asks about export compliance before anyone can install it. pux encrypts codes with libsodium, so read Apple's questions carefully. Once you know the answer, it can go in `Info.plist` as `ITSAppUsesNonExemptEncryption` so later builds skip the question.
 - **Internal testing** (up to 100 members of your App Store Connect team) needs no review: add testers to an internal group.
 - **External testing** needs Beta App Review the first time, plus test information and a privacy policy URL (`https://pux.vidur.xyz/privacy`).
+
+## Keyboard OTP AutoFill prototype (iOS 18+)
+
+Pux includes an OTP-only credential provider extension (`xyz.vidur.pux.AutoFill`).
+The app and push extension still support iOS 15; the AutoFill extension requires
+an iOS 18 SDK or newer and runs only on iOS 18+.
+
+To try it on a device:
+
+1. Open `Pux.xcodeproj` in Xcode 16 or newer. Enable AutoFill Credential Provider
+   for the Pux app and AutoFillExtension targets, using the same team and shared
+   Keychain group as NotificationService. Allow Xcode to update development
+   profiles, or provide profiles containing those entitlements. See TestFlight
+   setup above for distribution profiles and `IOS_AUTOFILL_PROFILE_BASE64`.
+2. Install and enroll Pux. Open **Keyboard AutoFill**, turn on **Use received codes
+   in AutoFill**, and save. Enable Pux under iOS Settings → General → AutoFill &
+   Passwords. Existing password managers can stay enabled.
+3. Return to Pux. Use **Send a test code**, then focus a verification-code field
+   in another app or Safari. Open the keyboard’s AutoFill provider picker and
+   choose Pux. The latest code appears with its sender. Tap **Fill** to insert it.
+   The Debug setup screen also has a verification field for inspecting the system
+   controls. If a push arrives while the picker is open, tap **Refresh**.
+4. To test a website suggestion, configure the exact **email sender domain** and
+   **website domain** in Pux and save. Receive a fresh OTP from that sender, then
+   open an OTP field on the configured website. Pux registers a credential identity
+   for that website. Tapping its suggestion fills the latest code only when its
+   sender domain matches and the server explicitly marked its sender verified.
+   The normal Pux test push has no sender domain, so it exercises the picker only.
+5. Check expiry after five minutes, disabling the feature, and removing the relay.
+   Each must prevent filling the old code. Check foreground/background delivery,
+   a locked-device push followed by unlocking, and a push while Pux is terminated.
+   Check unverified senders (picker selection only) and forwarding-confirmation
+   emails (excluded). Test website matching in Safari and in a bank app; app
+   suggestions depend on the app’s associated domains and OTP field setup.
+
+The prototype keeps **one latest OTP**, available for five minutes from the
+server’s `received_at` time, rather than five minutes from push arrival. Delayed,
+expired, future-dated, malformed, and forwarding-confirmation payloads cannot be
+filled. The shared Keychain stores the original encrypted envelope bound to the
+current relay ID; codes are decrypted in memory when requested. The envelope is
+overwritten by the next accepted code and deleted when changing AutoFill settings
+or clearing the enrollment. Expiry prevents filling; it does not schedule physical
+deletion of the encrypted envelope while the app is suspended.
+
+A sender domain does not identify a checkout website. The prototype therefore
+uses one explicit user-configured association, with exact sender matching and
+no inferred bank/merchant mappings. Unverified and unmapped codes remain
+available through deliberate selection in the picker. iOS decides which keyboard
+suggestions to show. A configured website identity can remain visible when there
+is no recent code; selecting it then opens the picker with an empty-state message.
+Returning from Settings to the setup screen republishes the configured identity.
+
+Implementation reference: [Apple’s OTP provider guide](https://developer.apple.com/documentation/authenticationservices/providing-one-time-passcodes-to-autofill).
+
+`AutoFillStoreTests` covers encrypted round-trips, opt-in, expiry and delayed pushes,
+malformed input, sender matching, corrupt storage, lost keys, and relay changes.
+Run the Swift package tests and simulator build from **Building and Testing** above
+on a Mac. Physical-device AutoFill and APNs behavior require the checks above;
+static project validation on Linux does not establish that they work.
