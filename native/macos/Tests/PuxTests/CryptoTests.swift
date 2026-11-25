@@ -9,7 +9,7 @@ final class CryptoTests: PuxTestCase {
         "-h4t5FOku-OWtLBcg4jo8jCNDVhdUtGyVWDk4z_FmFAI46lEoMhWZkF76pcW6lcgJI9UJ8a8JQM-" +
         "K3WA0vt7dXtlqXAKJwQfJ17REgKjSEVqOSjmmBpTmUcPtt_qHLCpMdk"
 
-    // Fixture published with the server's typed-payload change (vidurb/pux#2).
+    // Fixture published with the server's typed-payload change (gpdl49/pux#2).
     private let serverPrPublicKey = "6_SQ3WcbCBRRy0xu9yCMatZKbk29McalZTBo3gGzplw"
     private let serverPrSecretKey = "vfIJ42agVVRyDVVmTMtIHPL02MMvNyXMuYf8BgviqDI"
     private let serverPrCiphertext =

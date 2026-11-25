@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: pux
-Source: https://github.com/vidurb/pux
+Source: https://github.com/gpdl49/pux
 
 Files: *
 Copyright: 2026 Vidur Butalia
