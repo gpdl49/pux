@@ -47,7 +47,7 @@ defmodule PuxWeb.ErrorHTML do
         <p class="section-lede">{@message}</p>
         <p class="actions">
           <a class="button button--solid" href="/">Go to the home page</a>
-          <a class="button" href="https://github.com/vidurb/pux/issues">Report a problem</a>
+          <a class="button" href="https://github.com/gpdl49/pux/issues">Report a problem</a>
         </p>
       </div>
     </section>

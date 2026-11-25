@@ -5,7 +5,7 @@ pux relays one-time passwords, so security reports are the highest-priority issu
 ## Reporting a vulnerability
 
 Please **do not open a public issue**. Report privately through GitHub:
-[**Report a vulnerability**](https://github.com/vidurb/pux/security/advisories/new)
+[**Report a vulnerability**](https://github.com/gpdl49/pux/security/advisories/new)
 (Security tab → Advisories → Report a vulnerability).
 
 Include what you found, how to reproduce it, and the impact you expect. You should get an

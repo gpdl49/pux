@@ -1,6 +1,6 @@
 name: server image
 
-# Builds ghcr.io/vidurb/pux-server for linux/amd64 and linux/arm64, each on a
+# Builds ghcr.io/gpdl49/pux-server for linux/amd64 and linux/arm64, each on a
 # native runner (no QEMU), pushes both by digest, then joins them into one
 # multi-arch image under the caller's tags. Called by server.yml (main) and
 # release.yml (tags). The repo is public, so both hosted runners are free.
@@ -17,7 +17,7 @@ permissions:
   contents: read
 
 env:
-  IMAGE: ghcr.io/vidurb/pux-server
+  IMAGE: ghcr.io/gpdl49/pux-server
 
 jobs:
   build:

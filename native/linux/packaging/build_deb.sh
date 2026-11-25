@@ -66,7 +66,7 @@ cat > "$root/DEBIAN/control" <<CONTROL
 Package: pux
 Version: $version
 Architecture: $arch
-Maintainer: Vidur Butalia <https://github.com/vidurb/pux>
+Maintainer: Vidur Butalia <https://github.com/gpdl49/pux>
 Installed-Size: $size
 Depends: $depends
 Recommends: gnome-keyring | kwalletmanager | keepassxc

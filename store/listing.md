@@ -45,7 +45,7 @@ GOOD TO KNOW
 • You must be 18 or older to use pux.
 
 Privacy policy: https://pux.vidur.xyz/privacy
-Source code: https://github.com/vidurb/pux
+Source code: https://github.com/gpdl49/pux
 ```
 
 ## App Store
@@ -109,5 +109,5 @@ one-time password,2fa,verification,sms,roaming,travel,email,forward,encrypted,re
 | Field | Value |
 |-------|-------|
 | Privacy policy | `https://pux.vidur.xyz/privacy` |
-| Support | `https://github.com/vidurb/pux/issues` |
+| Support | `https://github.com/gpdl49/pux/issues` |
 | Marketing | `https://pux.vidur.xyz` |

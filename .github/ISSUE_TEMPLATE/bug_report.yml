@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Security problems go through [a private report](https://github.com/vidurb/pux/security/advisories/new), not here.
+        Security problems go through [a private report](https://github.com/gpdl49/pux/security/advisories/new), not here.
         Never paste a record ID, inbox address, enrollment JSON or private key: anyone with them can read your OTPs.
   - type: dropdown
     id: component

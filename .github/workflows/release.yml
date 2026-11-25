@@ -298,7 +298,7 @@ jobs:
           ' CHANGELOG.md > notes.md
           {
             echo
-            echo "Server image: \`ghcr.io/vidurb/pux-server:$VERSION\`"
+            echo "Server image: \`ghcr.io/gpdl49/pux-server:$VERSION\`"
           } >> notes.md
           (cd dist && sha256sum -- * > SHA256SUMS)
       # release-please has already made a draft release for this tag; attach the

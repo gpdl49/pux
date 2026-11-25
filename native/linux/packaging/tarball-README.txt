@@ -40,4 +40,4 @@ pux also needs, running in your desktop session:
     without one.
   - A notification service (org.freedesktop.Notifications) to show codes.
 
-https://github.com/vidurb/pux
+https://github.com/gpdl49/pux

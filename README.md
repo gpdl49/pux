@@ -5,8 +5,8 @@
   </picture>
 </h1>
 
-[![server](https://github.com/vidurb/pux/actions/workflows/server.yml/badge.svg)](https://github.com/vidurb/pux/actions/workflows/server.yml)
-[![native](https://github.com/vidurb/pux/actions/workflows/native.yml/badge.svg)](https://github.com/vidurb/pux/actions/workflows/native.yml)
+[![server](https://github.com/gpdl49/pux/actions/workflows/server.yml/badge.svg)](https://github.com/gpdl49/pux/actions/workflows/server.yml)
+[![native](https://github.com/gpdl49/pux/actions/workflows/native.yml/badge.svg)](https://github.com/gpdl49/pux/actions/workflows/native.yml)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
 
 Get your bank OTPs on your computer and every phone you add, even when your phone has no signal. pux takes the OTP from the email your bank sends, end-to-end encrypts it, and pushes it to your devices over any internet connection.
@@ -18,14 +18,14 @@ Use the hosted instance at [pux.vidur.xyz](https://pux.vidur.xyz) or [run your o
 
 ## Download
 
-Builds of the [latest release](https://github.com/vidurb/pux/releases/latest), all set up for the hosted instance:
+Builds of the [latest release](https://github.com/gpdl49/pux/releases/latest), all set up for the hosted instance:
 
 | Platform | Download |
 |----------|----------|
-| Android | [APK](https://github.com/vidurb/pux/releases/latest) |
-| macOS 12 or later (signed and notarized) | [DMG](https://github.com/vidurb/pux/releases/latest) |
-| Debian 12, Ubuntu 22.04 or later | [x86-64 DEB](https://github.com/vidurb/pux/releases/latest) |
-| Other Linux, x86-64 | [tar.gz](https://github.com/vidurb/pux/releases/latest) |
+| Android | [APK](https://github.com/gpdl49/pux/releases/latest) |
+| macOS 12 or later (signed and notarized) | [DMG](https://github.com/gpdl49/pux/releases/latest) |
+| Debian 12, Ubuntu 22.04 or later | [x86-64 DEB](https://github.com/gpdl49/pux/releases/latest) |
+| Other Linux, x86-64 | [tar.gz](https://github.com/gpdl49/pux/releases/latest) |
 | iOS | TestFlight beta, by invitation for now |
 
 The release page includes SHA256 checksums. Server image: `ghcr.io/vidurb/pux-server:latest`.
@@ -135,7 +135,7 @@ See [native/README.md](native/README.md) and the platform READMEs for build and 
 
 #### Installing the desktop apps
 
-Each [release](https://github.com/vidurb/pux/releases) has these desktop builds:
+Each [release](https://github.com/gpdl49/pux/releases) has these desktop builds:
 
 | System | File | Install |
 |--------|------|---------|

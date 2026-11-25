@@ -179,7 +179,7 @@ defmodule PuxWeb.PageControllerTest do
       body = response(conn, 200)
 
       assert ["text/plain; charset=utf-8"] = get_resp_header(conn, "content-type")
-      assert body =~ "Contact: https://github.com/vidurb/pux/security/advisories/new\n"
+      assert body =~ "Contact: https://github.com/gpdl49/pux/security/advisories/new\n"
       assert body =~ "/.well-known/security.txt\n"
 
       [_, expires] = Regex.run(~r/^Expires: (.+)$/m, body)
