@@ -6,6 +6,14 @@ After 0.1.0, [release-please](https://github.com/googleapis/release-please) writ
 section from the [Conventional Commit](https://www.conventionalcommits.org/) titles of
 merged PRs; see [CONTRIBUTING.md](CONTRIBUTING.md#releases-maintainers).
 
+## [0.2.3](https://github.com/gpdl49/pux/compare/v0.2.2...v0.2.3) (2026-11-25)
+
+
+### Fixed
+
+* **deps:** bump the mix group across 1 directory with 7 updates ([#96](https://github.com/gpdl49/pux/issues/96)) ([53c0cd6](https://github.com/gpdl49/pux/commit/53c0cd60853c8230119599dd328dab3416d6f333))
+* point links and image publishing at gpdl49/pux ([#94](https://github.com/gpdl49/pux/issues/94)) ([c16dbca](https://github.com/gpdl49/pux/commit/c16dbca03b2c1255ec754771d4d271983f6c3b2c))
+
 ## [0.2.2](https://github.com/vidurb/pux/compare/v0.2.1...v0.2.2) (2026-11-13)
 
 
