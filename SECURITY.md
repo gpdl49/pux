@@ -19,7 +19,7 @@ pux is pre-1.0. Only the latest release, and the `main` branch, receive security
 
 | Component | Supported |
 |-----------|-----------|
-| Server (`ghcr.io/vidurb/pux-server`) | latest release and `main` |
+| Server (`ghcr.io/gpdl49/pux-server`) | latest release and `main` |
 | Apps (Android, iOS, macOS, Linux) | latest release |
 
 ## Scope

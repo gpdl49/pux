@@ -85,6 +85,8 @@ curl -fsS https://pux.example.com/health
 Database migrations run automatically on start. `PUX_VERSION` in `.env` pins the image tag: use a
 release such as `0.1.0` in production, or `main` for the latest build of the main branch.
 
+Releases up to 0.2.2 were published as `ghcr.io/vidurb/pux-server`; to pin one of those, change the image in `compose.yaml` too.
+
 Check that mail reaches the server: create a relay in a desktop app (below), then send an email
 containing `Your OTP is 123456` to its inbox address. Unsigned test mail shows as "(unverified)".
 To check push on its own, tap **Send a test code** on the app's home screen, which asks the server

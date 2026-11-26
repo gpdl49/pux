@@ -28,7 +28,7 @@ Builds of the [latest release](https://github.com/gpdl49/pux/releases/latest), a
 | Other Linux, x86-64 | [tar.gz](https://github.com/gpdl49/pux/releases/latest) |
 | iOS | TestFlight beta, by invitation for now |
 
-The release page includes SHA256 checksums. Server image: `ghcr.io/vidurb/pux-server:latest`.
+The release page includes SHA256 checksums. Server image: `ghcr.io/gpdl49/pux-server:latest`.
 
 See [Installing the desktop apps](#installing-the-desktop-apps) for what each desktop build needs.
 
@@ -202,7 +202,7 @@ Decrypted push payloads are JSON with a `type`:
 
 ## Deployment
 
-To run your own server with Docker Compose, see [deploy/README.md](deploy/README.md). Releases publish `ghcr.io/vidurb/pux-server:<version>`; `main` tracks the main branch.
+To run your own server with Docker Compose, see [deploy/README.md](deploy/README.md). Releases publish `ghcr.io/gpdl49/pux-server:<version>`; `main` tracks the main branch.
 
 The hosted instance runs on the homestacks Sinkhole cluster; see [`clusters/sinkhole/pux-system/README.md`](https://github.com/gpdl49/homestacks/blob/main/clusters/sinkhole/pux-system/README.md) for SMTP exposure, DNS, TLS and secrets.
 
